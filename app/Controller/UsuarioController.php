@@ -27,6 +27,27 @@ if ($action === 'list') {
     exit;
 }
 
+// Requisição para cadastrar usuário
+if ($action === 'create') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    $nome = $data['nome'] ?? null;
+    $email = $data['email'] ?? null;
+
+    if ($nome && $email) {
+        $stmt = $conn->prepare("INSERT INTO usuarios (nome, email) VALUES (?, ?)");
+        $stmt->bind_param("ss", $nome, $email);
+
+        if ($stmt->execute()) {
+            echo json_encode(['sucesso' => true, 'mensagem' => 'Usuário cadastrado com sucesso!']);
+        } else {
+            echo json_encode(['sucesso' => false, 'mensagem' => 'Erro ao cadastrar usuário!']);
+        }
+    } else {
+        echo json_encode(['sucesso' => false, 'mensagem' => 'Nome e e-mail são obrigatórios!']);
+    }
+    exit;
+}
+
 // Requisição para excluir usuário
 if ($action === 'delete') {
     $data = json_decode(file_get_contents('php://input'), true);
@@ -64,5 +85,4 @@ if ($action === 'edit') {
 }
 
 echo json_encode(['sucesso' => false, 'mensagem' => 'Ação inválida!']);
-
 ?>

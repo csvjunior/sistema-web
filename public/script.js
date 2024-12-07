@@ -5,12 +5,12 @@ document.getElementById("form-cadastro").addEventListener("submit", async (e) =>
     const email = document.getElementById("email").value;
 
     try {
-        const response = await fetch("../app/Controller/UsuarioController.php", {
+        const response = await fetch("../app/Controller/UsuarioController.php?action=create", { // Envia "action" na query string
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ nome, email, action: "create" }), // Adiciona o parâmetro action
+            body: JSON.stringify({ nome, email }),
         });
 
         if (!response.ok) {
@@ -157,7 +157,3 @@ ajustarResponsividade();
 // Adapta-se ao redimensionamento da janela
 window.addEventListener("resize", ajustarResponsividade);
 */
-
-
-
-
